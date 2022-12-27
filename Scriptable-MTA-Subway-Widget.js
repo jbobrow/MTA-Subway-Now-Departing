@@ -93,12 +93,7 @@ timeStack.setPadding(10, 0, 0, 0);
 // timeStack.borderWidth = 1;
 // timeStack.borderColor = new Color('#FF00FF');
 
-//console.log("sliced: " + times[0].slice(0, -6));
-let dateFormatted = new Date(times[0].slice(0, -6));
-//console.log(dateFormatted);
-let minutesTil = new Date (dateFormatted - Date.now());
-//console.log(minutesTil);
-let minutesTilText = minutesTil.getMinutes() + " min";
+let minutesTilText = times[0] ? getMinutesTil(times[0]) : "* min";
 
 const timeText = timeStack.addText(minutesTilText);
 timeText.font = new Font("Helvetica-Bold", 28);
@@ -134,6 +129,24 @@ Script.complete();
 w.presentSmall();
 
 
+/*
+ *  Returns a string with minutes til a specific time (i.e. "3 min")
+ *  note: returns "Departing" if 0 minutes til
+ *  TODO: returns "- min" if > than 59 minutes
+ */
+
+function getMinutesTil(date) {
+
+	let minutesTil = new Date (date - Date.now());
+
+	if( minutesTil.getMinutes() === 0 ) {
+		return "Departing";
+	}
+	else {
+		return minutesTil.getMinutes() + " min";
+	}
+
+}
 
 /*
  *  Returns a time formatted with hh:mm and AM or PM accordingly (i.e. 12:34 AM)
@@ -235,9 +248,16 @@ function getTimesForRouteAndDirection(r, dir, station) {
 	for(var i = 0; i < allTrains.length; i++) {
 		let train = allTrains[i];
 		if( train.route === r ) {
-			times.push(train.time);
+			times.push(standardizeDate(train.time));
 		}
 	}
 
 	return times;
+}
+
+/*
+ * Returns the date from the MTAPI in a format that is standardized (removes the "-05:00")
+ */
+function standardizeDate(date) {
+	return new Date(date.slice(0, -6));
 }
