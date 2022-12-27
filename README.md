@@ -15,8 +15,7 @@ A simple widget for getting realtime data on a train of your choice
 - 🔲 Dynamic update (this is currently only possible for a native widget in Swift with Dynamic Dates)
 
 ## Screenshot
-![Screenshot of Now Departing iOS Widget](https://user-images.githubusercontent.com/772799/209716126-d9d6b4e4-232f-4222-af18-085853ec0aaf.jpeg)
-### Additional screenshots
-This one with departing feature and flaws pointed out cuz not dynamic
-![Screenshot of Now Departing iOS Widget](https://user-images.githubusercontent.com/772799/209711308-7a1a8f78-fe67-4ea4-b548-2fbe0dc10695.jpeg)
-I love that this screenshot shows what happens when the requested JSON source is not responding... a severely out of sync widget. At least the last updated time confirms this, but best case would be to simply have a working widget 😉  
+![iphonex-mockup-now-departing-combined](https://user-images.githubusercontent.com/772799/209721780-61d58e9b-72dc-48ec-80ce-e1c3170d6984.png)
+The screenshot on the right shows the departing feature as well as the flaw of not being dynamic. At least the last updated time confirms that it is not up to date, but best case would be to simply have a working widget 😉. Simply click on the widget to run it and it will update quickly.  
+
+Thanks [realvjy](https://dribbble.com/realvjy) for the simply iPhone PSD template. It's easier on my eyes than a big screenshot w/o border.
