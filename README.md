@@ -18,4 +18,4 @@ A simple widget for getting realtime data on a train of your choice
 ![iphonex-mockup-now-departing-combined](https://user-images.githubusercontent.com/772799/209721780-61d58e9b-72dc-48ec-80ce-e1c3170d6984.png)
 The screenshot on the right shows the departing feature as well as the flaw of not being dynamic. At least the last updated time confirms that it is not up to date, but best case would be to simply have a working widget 😉. Simply click on the widget to run it and it will update quickly.  
 
-Thanks [realvjy](https://dribbble.com/realvjy) for the simply iPhone PSD template. It's easier on my eyes than a big screenshot w/o border.
+Thanks [realvjy](https://dribbble.com/realvjy) for the simple iPhone PSD template. It's easier on my eyes than a big screenshot w/o border.
