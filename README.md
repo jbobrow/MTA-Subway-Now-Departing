@@ -16,3 +16,4 @@ A simple widget for getting realtime data on a train of your choice
 
 ## Screenshot
 ![Screenshot of Now Departing iOS Widget](https://user-images.githubusercontent.com/772799/209606878-ab919bef-5824-4a34-a73a-3f3d4d97ea44.PNG)
+I love that this screenshot shows what happens when the requested JSON source is not responding... a severely out of sync widget. At least the last updated time confirms this, but best case would be to simply have a working widget 😉  
