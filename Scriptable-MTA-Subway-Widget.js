@@ -87,18 +87,54 @@ minText.textColor = new Color('#00FF66');
 
 // DRAW TIMES
 const timeStack = w.addStack();
-timeStack.addSpacer();	// used to center the text (1 of 2)
-timeStack.centerAlignContent();
-timeStack.setPadding(10, 0, 0, 0);
+timeStack.setPadding(2, 0, 0, 0);
+timeStack.layoutVertically();
+
+const bigTimeStack = timeStack.addStack();
+bigTimeStack.addSpacer();	// used to center the text (1 of 2)
+bigTimeStack.centerAlignContent();
+bigTimeStack.setPadding(0, 0, 0, 0);
+bigTimeStack.layoutHorizontally();
 // timeStack.borderWidth = 1;
 // timeStack.borderColor = new Color('#FF00FF');
 
 let minutesTilText = times[0] ? getMinutesTil(times[0]) : "* min";
 
-const timeText = timeStack.addText(minutesTilText);
-timeText.font = new Font("Helvetica-Bold", 28);
-timeText.textColor = new Color('#FFFFFF');
-timeStack.addSpacer();	// used to center the text (2 of 2)
+const bigTimeText = bigTimeStack.addText(minutesTilText);
+bigTimeText.font = new Font("Helvetica-Bold", 28);
+bigTimeText.textColor = new Color('#FFFFFF');
+bigTimeText.lineLimit = 1;
+bigTimeText.minimumScaleFactor = 0.5;
+bigTimeStack.addSpacer();	// used to center the text (2 of 2)
+
+// DRAW ALT TIMES
+const altTimeStack = timeStack.addStack();
+altTimeStack.addSpacer();	// used to center the text (1 of 2)
+altTimeStack.centerAlignContent();
+altTimeStack.setPadding(0, 0, 0, 0);
+altTimeStack.layoutHorizontally();
+// altTimeStack.borderWidth = 1;
+// altTimeStack.borderColor = new Color('#FF00FF');
+
+for(var i = 1; i < times.length; i++) {
+	
+	var altMinutesTilText;
+	
+	if(i != 1 ) {
+		altMinutesTilText = ", " + getMinutesTil(times[i]);
+	}
+	else {
+		altMinutesTilText = getMinutesTil(times[i]);
+	}
+	
+	const altTimeText = altTimeStack.addText(altMinutesTilText);
+	altTimeText.font = new Font("Helvetica-Bold", 12);
+	altTimeText.textColor = new Color('#666666');
+	altTimeText.lineLimit = 1;
+	altTimeText.minimumScaleFactor = 0.75;
+}
+
+altTimeStack.addSpacer();	// used to center the text (2 of 2)
 
 
 
