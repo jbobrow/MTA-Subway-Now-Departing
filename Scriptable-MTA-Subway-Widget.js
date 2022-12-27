@@ -11,9 +11,10 @@
  *   !!Note: commas separate, but no spaces between
  *
  * Loads the latest MTA Transit data from
- * https://mtapi.default.k.fu.io/swagger/ui#/
+ * https://api.wheresthefuckingtrain.com/by-route/
  *
  */
+const API_URL = 'https://api.wheresthefuckingtrain.com';
 
 // get parameter for route
 // get parameter for station
@@ -23,7 +24,7 @@ const route = params[0] ? params[0] : "G";
 const station = params[1] ? params[1] : "Classon Av";
 const direction = params[2] ? params[2] : "N";
 
-let url = "https://mtapi.default.k.fu.io/by-route/" + route;
+let url = API_URL + "/by-route/" + route;
 let req = new Request(url);
 let json = await req.loadJSON();
 
