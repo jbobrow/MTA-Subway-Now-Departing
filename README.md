@@ -1,5 +1,6 @@
 # 🚇 "Now Departing" a Scriptable Widget
 A simple widget for getting realtime data on a train of your choice
+![Now-Departing-Widget](https://user-images.githubusercontent.com/772799/209726229-ec5e5157-37dd-4229-99c9-1e1a65c145f1.png)
 
 ## How to Install
 1. Download [Scriptable for iOS](https://apps.apple.com/us/app/scriptable/id1405459188)
