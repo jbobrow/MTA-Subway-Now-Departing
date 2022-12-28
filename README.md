@@ -7,7 +7,7 @@ A simple widget for getting realtime data on a train of your choice
 2. Add a new Script called "Now Departing"
 3. Copy and Paste the contents of [Scriptable-MTA-Subway-Widget.js](https://raw.githubusercontent.com/jbobrow/MTA-Subway-Now-Departing/main/Scriptable-MTA-Subway-Widget.js)
 4. Add a Scriptable Widget to your homescreen
-5. Set the Widget Parameter to: [Train],[Station],[Direction] (i.e. G,Classon Av,N) 
+5. Set the Widget Parameter to: `Train`,`Station`,`Direction` (i.e. `G,Classon Av,N`) ✋[help for parameters](FAQ.md) 
 
 Want a visual guide? Step-by-step instructions 👉 [here](Step-by-step.md)
 
