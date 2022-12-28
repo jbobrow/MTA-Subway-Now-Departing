@@ -114,7 +114,7 @@ bigTimeStack.layoutHorizontally();
 // timeStack.borderWidth = 1;
 // timeStack.borderColor = new Color('#FF00FF');
 
-let minutesTilText = times[0] ? getMinutesTil(times[0]) : "* min";
+let minutesTilText = times[0] ? getMinutesTilText(times[0]) : "- min";
 
 const bigTimeText = bigTimeStack.addText(minutesTilText);
 bigTimeText.font = new Font("Helvetica-Bold", 28);
@@ -137,10 +137,10 @@ for(var i = 1; i < times.length; i++) {
 	var altMinutesTilText;
 	
 	if(i != 1 ) {
-		altMinutesTilText = ", " + getMinutesTil(times[i]);
+		altMinutesTilText = ", " + getMinutesTilText(times[i]);
 	}
 	else {
-		altMinutesTilText = getMinutesTil(times[i]);
+		altMinutesTilText = getMinutesTilText(times[i]);
 	}
 	
 	const altTimeText = altTimeStack.addText(altMinutesTilText);
@@ -187,7 +187,7 @@ w.presentSmall();
  *  TODO: returns "- min" if > than 59 minutes
  */
 
-function getMinutesTil(date) {
+function getMinutesTilText(date) {
 
 	let minutesTil = new Date (date - Date.now());
 
