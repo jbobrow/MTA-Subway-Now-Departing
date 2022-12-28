@@ -15,6 +15,7 @@
  *
  */
 const API_URL = 'https://api.wheresthefuckingtrain.com';
+const version = 'v1.0.23';	// 1.0. followed by the number of commits (an attempt at semantic versioning)
 
 // get parameter for route
 // get parameter for station
@@ -108,6 +109,14 @@ minText.font = Font.mediumSystemFont(10);
 minText.textColor = new Color('#00FF66');
 // lastUpdatedStackBottom.borderWidth = 1;
 // lastUpdatedStackBottom.borderColor = new Color('#FF00FF');
+
+// ADD THE SCRIPT VERSION #
+const lastUpdatedStackVersion = lastUpdatedStack.addStack();
+lastUpdatedStackVersion.layoutHorizontally();
+lastUpdatedStackVersion.addSpacer();
+const versionText = lastUpdatedStackVersion.addText(version);
+versionText.font = new Font("Menlo", 10);
+versionText.textColor = new Color('#222222');
 
 
 // DRAW TIMES
