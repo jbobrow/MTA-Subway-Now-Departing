@@ -144,7 +144,15 @@ if(getMinutesTil(times[timeIndex]) > 55) {
 
 let minutesTilText = times[timeIndex] && times[timeIndex] != "no times" ? getMinutesTilText(times[timeIndex]) : "- min";
 
-const bigTimeText = bigTimeStack.addText(minutesTilText);
+const bigTimeText = bigTimeStack.addDate(times[timeIndex]);
+bigTimeText.applyRelativeStyle();
+
+// --------------------------------------------
+//
+// TODO: show only minutes (remove the seconds)
+//
+// --------------------------------------------
+
 bigTimeText.font = new Font("Helvetica-Bold", 28);
 bigTimeText.textColor = new Color('#FFFFFF');
 bigTimeText.lineLimit = 1;
