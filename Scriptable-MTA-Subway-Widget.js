@@ -114,7 +114,17 @@ bigTimeStack.layoutHorizontally();
 // timeStack.borderWidth = 1;
 // timeStack.borderColor = new Color('#FF00FF');
 
-let minutesTilText = times[0] ? getMinutesTilText(times[0]) : "- min";
+var timeIndex = 0;
+
+if(getMinutesTil(times[timeIndex]) > 55) {	
+	// This means the train has departed
+	// I've only witnessed 59 minutes, but really anything over 30 shouldn't be in the feed
+	// skip ahead to the next train
+	timeIndex = 1;
+	// in theory this should be iterative, but in practice, no need
+}
+
+let minutesTilText = times[timeIndex] ? getMinutesTilText(times[timeIndex]) : "- min";
 
 const bigTimeText = bigTimeStack.addText(minutesTilText);
 bigTimeText.font = new Font("Helvetica-Bold", 28);
@@ -132,11 +142,11 @@ altTimeStack.layoutHorizontally();
 // altTimeStack.borderWidth = 1;
 // altTimeStack.borderColor = new Color('#FF00FF');
 
-for(var i = 1; i < times.length; i++) {
+for(var i = timeIndex+1; i < times.length; i++) {
 	
 	var altMinutesTilText;
 	
-	if(i != 1 ) {
+	if(i != timeIndex+1 ) {
 		altMinutesTilText = ", " + getMinutesTilText(times[i]);
 	}
 	else {
@@ -182,22 +192,29 @@ w.presentSmall();
 
 
 /*
- *  Returns a string with minutes til a specific time (i.e. "3 min")
- *  note: returns "Departing" if 0 minutes til
- *  TODO: returns "- min" if > than 59 minutes
+ *  Returns a number with minutes til a specific time (i.e. "3")
  */
 
-function getMinutesTilText(date) {
+function getMinutesTil(date) {
 
 	let minutesTil = new Date (date - Date.now());
 
-	if( minutesTil.getMinutes() === 0 ) {
+	return minutesTil.getMinutes();
+}
+
+
+/*
+ *  Returns a string with minutes til a specific time (i.e. "3 min")
+ *  note: returns "Departing" if 0 minutes til
+ */
+
+function getMinutesTilText(date) {
+	
+	if( getMinutesTil(date) === 0 ) {
 		return "Departing";
 	}
-	else {
-		return minutesTil.getMinutes() + " min";
-	}
 
+	return getMinutesTil(date) + " min";
 }
 
 /*
