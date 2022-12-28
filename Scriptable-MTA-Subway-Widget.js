@@ -60,7 +60,8 @@ const routeText = routeStack.addText(route);
 routeText.font = new Font("Helvetica-Bold", 40);
 routeText.textColor = new Color('#FFFFFF');
 
-row.addSpacer()
+// routeStack.borderWidth = 1;
+// routeStack.borderColor = new Color('#0000FF');
 
 
 // DRAW LAST UPDATED TIME
@@ -75,14 +76,29 @@ let updatedTimeText = formatTime(updatedDate);
 const lastUpdatedStack = row.addStack();
 lastUpdatedStack.setPadding(0, 0, 0, 0);
 lastUpdatedStack.layoutVertically();
+// lastUpdatedStack.borderWidth = 1;
+// lastUpdatedStack.borderColor = new Color('#0000FF');
 
-const lastUpdatedText = lastUpdatedStack.addText("Updated");
+
+const lastUpdatedStackTop = lastUpdatedStack.addStack();
+lastUpdatedStackTop.layoutHorizontally();
+lastUpdatedStackTop.addSpacer();
+const lastUpdatedText = lastUpdatedStackTop.addText("Updated");
 lastUpdatedText.font = Font.mediumSystemFont(10);
 lastUpdatedText.textColor = new Color('#FFFFFF');
+lastUpdatedText.lineLimit = 1;
+// lastUpdatedStackTop.borderWidth = 1;
+// lastUpdatedStackTop.borderColor = new Color('#FF00FF');
 
-const minText = lastUpdatedStack.addText(updatedTimeText);	// TODO: time or minutes
+
+const lastUpdatedStackBottom = lastUpdatedStack.addStack();
+lastUpdatedStackBottom.layoutHorizontally();
+lastUpdatedStackBottom.addSpacer();
+const minText = lastUpdatedStackBottom.addText(updatedTimeText);	// TODO: time or minutes
 minText.font = Font.mediumSystemFont(10);
 minText.textColor = new Color('#00FF66');
+// lastUpdatedStackBottom.borderWidth = 1;
+// lastUpdatedStackBottom.borderColor = new Color('#FF00FF');
 
 
 // DRAW TIMES
