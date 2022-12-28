@@ -25,8 +25,17 @@ const station = params[1] ? params[1] : "Classon Av";
 const direction = params[2] ? params[2] : "N";
 
 let url = API_URL + "/by-route/" + route;
-let req = new Request(url);
-let json = await req.loadJSON();
+
+var json;
+
+try {
+	let req = new Request(url);
+	json = await req.loadJSON();
+}
+catch(err) {
+	console.log("offline mode");
+	json = {};	// an empty JSON
+}
 
 
 // PARSE THE JSON
@@ -124,7 +133,7 @@ if(getMinutesTil(times[timeIndex]) > 55) {
 	// in theory this should be iterative, but in practice, no need
 }
 
-let minutesTilText = times[timeIndex] ? getMinutesTilText(times[timeIndex]) : "- min";
+let minutesTilText = times[timeIndex] && times[timeIndex] != "no times" ? getMinutesTilText(times[timeIndex]) : "- min";
 
 const bigTimeText = bigTimeStack.addText(minutesTilText);
 bigTimeText.font = new Font("Helvetica-Bold", 28);
@@ -224,7 +233,13 @@ function formatTime(date) {
   var hours = date.getHours();
   var minutes = date.getMinutes();
   
-  var ampm = hours >= 12 ? "PM" : "AM";
+  var ampm;
+  if(hours) {
+	  ampm = hours >= 12 ? " PM" : " AM";
+  }
+  else {
+  	ampm = "";
+  }
   
   // convert from 24h time
   hours %= 12;
@@ -235,7 +250,11 @@ function formatTime(date) {
   // display minutes in :07 format
   minutes = minutes < 10 ? "0" + minutes : minutes;
   
-  return hours + ":" + minutes + " " + ampm;
+  // catch the NAN edge case with "--:--"
+  hours = hours?hours:"--";
+  minutes = minutes?minutes:"--";
+
+  return hours + ":" + minutes + ampm;
 }
 
 
@@ -283,7 +302,7 @@ function getColorForRoute(route) {
  */
 function getStationFromJSON(s, json) {
 
-	let stations = json.data;
+	let stations = json.data ? json.data : "";
 
 	for(var i = 0; i < stations.length; i++) {
 		let station = stations[i];
@@ -302,7 +321,7 @@ function getStationFromJSON(s, json) {
 function getTimesForRouteAndDirection(r, dir, station) {
 	
 	if( station.name === "not found") {
-		return ["no times"]
+		return ["no times"];
 	}
 
 	var times = [];
