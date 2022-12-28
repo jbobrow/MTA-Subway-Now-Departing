@@ -9,6 +9,8 @@ A simple widget for getting realtime data on a train of your choice
 4. Add a Scriptable Widget to your homescreen
 5. Set the Widget Parameter to: [Train],[Station],[Direction] (i.e. G,Classon Av,N) 
 
+Want a visual guide? Step-by-step instructions 👉 [here](Step-by-step.md)
+
 ## ToDo
 - ✅ If time is "0 min" either show next train or "departing"
 - ✅ Additional times (currently only shows the latest, could be nice to show 2-3 times)
