@@ -14,8 +14,8 @@
  * https://api.wheresthefuckingtrain.com/by-route/
  *
  */
-const API_URL = 'https://api.wheresthefuckingtrain.com';
-const version = 'v1.0.23';	// 1.0. followed by the number of commits (an attempt at semantic versioning)
+const API_URL = "https://api.wheresthefuckingtrain.com";
+const version = "1.0.26";	// 1.0. followed by the number of commits (an attempt at semantic versioning)
 
 // get parameter for route
 // get parameter for station
@@ -114,7 +114,7 @@ minText.textColor = new Color('#00FF66');
 const lastUpdatedStackVersion = lastUpdatedStack.addStack();
 lastUpdatedStackVersion.layoutHorizontally();
 lastUpdatedStackVersion.addSpacer();
-const versionText = lastUpdatedStackVersion.addText(version);
+const versionText = lastUpdatedStackVersion.addText("v"+version);
 versionText.font = new Font("Menlo", 10);
 versionText.textColor = new Color('#222222');
 
@@ -200,13 +200,6 @@ stationStack.addSpacer();	// used to center the text (2 of 2)
 // ---------------
 // END DRAW WIDGET
 // ---------------
-
-
-Script.setWidget(w);
-Script.complete();
-
-// RUN WIDGET
-w.presentSmall();
 
 
 /*
@@ -358,3 +351,168 @@ function getTimesForRouteAndDirection(r, dir, station) {
 function standardizeDate(date) {
 	return new Date(date.slice(0, -6));
 }
+
+
+
+
+/* ------------------------------------
+ *  The following is all to support
+ *  remote update with new verions.
+ *
+ *  Sharable (beta)
+ *  Remote update for version control
+ *  https://shareable.vercel.app/docs/updater
+ *
+ * ------------------------------------
+ */
+
+
+async function getUpdateData() {
+	
+	const id = 60; // Your script's shareable id
+	let updateURL = "https://shareable.vercel.app/api/updater?id=" + id;
+	let updateRequest = new Request(updateURL);
+	let updateJSON = await updateRequest.loadJSON();
+	return updateJSON;
+}
+
+// function to be called when update data is available
+async function checkForUpdates(data) {
+	
+	const isUpdateReady = await updaterModuleLocal(version, data.version);
+
+	if(isUpdateReady == true){
+	    console.log("Update available!");
+			versionText.textColor = new Color('#007AFF');
+
+			// TODO: find the right way to do this from the Widget
+	    //showAlert(data);	
+	}
+	else if(isUpdateReady == null){
+	    console.log("Up to date!");
+	}
+	else if(isUpdateReady == false){
+			console.log("Rollback available!");
+			versionText.textColor = new Color('#007AFF');
+
+			// TODO: find the right way to do this from the Widget
+			//showAlert(data);
+	}
+
+	Script.setWidget(w);
+	Script.complete();
+
+	// RUN WIDGET
+	w.presentSmall();
+
+
+}
+
+// Show an alert and start a download via web browser if chosen
+async function showAlert(data) {
+
+	const alert = new Alert();
+	alert.title = "Update Available";
+	alert.message = "v" + data.version + " is available for download. Would you like to update from v" + version;
+	alert.addAction("Download");
+	alert.addCancelAction("Not now");
+	const actionIndex = await alert.presentAlert();
+	if (actionIndex === -1) {
+		console.log("clicked not now");
+	}
+	else {
+		console.log("clicked download");
+    Safari.open(data.download_link)  
+	}
+}
+
+// checking for updates, using promises to await the data
+getUpdateData().then(res => checkForUpdates(res)).catch(err => console.log(err)); 
+
+
+// ----- END VERSION UPDATE ------
+
+
+// ----- BEGIN UPDATER "MODULE" ------
+/*
+ * To make it easier on the end user, no need to install a module, we'll just
+ * place the code here and give credit where credit is due. 
+ *
+ * source: https://gist.github.com/FifiTheBulldog/a44e711389847596abefb4bbddcc5e37
+ * Thanks @FifiTheBulldog
+ */
+
+/**
+ * Removes build metadata and any leading non-numerical characters from a version number.
+ * @param {string} ver The raw version number.
+ * @returns {string} The sanitized version number.
+ */
+const cleanVersion = (ver) => {
+  let plusIndex = ver.indexOf("+");
+  if (plusIndex < 0) plusIndex = ver.length;
+  return ver.substring(0, plusIndex)
+    .trim()
+    .replace(/^[^0-9]*/, "");
+}
+
+/**
+ * Compares two version number elements to determine which is greater.
+ * @param {string} a An element from the installed version number.
+ * @param {string} b An element from the latest published version number.
+ * @returns {boolean|null} Whether element b is greater than element a, or null if they are equal.
+ */
+const compareElements = (a, b) => {
+  const aIsInt = String(parseInt(a, 10)) === a;
+  const bIsInt = String(parseInt(b, 10)) === b;
+  if (aIsInt !== bIsInt) return (aIsInt && !bIsInt);
+  const compareResult = (aIsInt) ? (b - a) : b.localeCompare(a);
+  return (compareResult === 0) ? null : (compareResult > 0);
+};
+
+/**
+ * Gets an element at an index from an array of version elements.
+ * @param {string[]} arr An array of elements split from a dot-separated version number.
+ * @param {number} index The index of an element in `arr`.
+ * @returns {string} The element in `arr` at `index`, or "0" if no element exists in `arr` at the provided index.
+ */
+const getElementFromSplit = (arr, index) => {
+  return ((index < arr.length) && (arr[index].length !== 0)) ? arr[index] : "0";
+}
+
+/**
+ * Compares two dot-separated version number components to determine which is greater.
+ * @param {string} a A dot-separated version component from the currently installed version number.
+ * @param {string} b A dot-separated version component from the latest published version number.
+ * @returns {boolean|null} Whether dot-separated version b is greater than dot-separated version a, or null if they are equal.
+ */
+const compareDotSeparated = (a, b) => {
+  const aDotSplit = a.split(".");
+  const bDotSplit = b.split(".");
+  const splitLength = Math.max(aDotSplit.length, bDotSplit.length);
+  for (let i = 0; i !== splitLength; ++i) {
+    const compared = compareElements(getElementFromSplit(aDotSplit, i), getElementFromSplit(bDotSplit, i));
+    if (compared !== null) return compared;
+  }
+  return null;
+};
+
+/**
+ * Compares two version numbers to determine which is greater.
+ * @param {string} a The currently installed version number.
+ * @param {string} b The latest published version number.
+ * @returns {boolean|null} Whether version b is greater than version a, or null if they are equal.
+ */
+async function updaterModuleLocal(a, b){
+  const aDashSplit = cleanVersion(a).split("-");
+  const bDashSplit = cleanVersion(b).split("-");
+  // "mmp" = "MAJOR.MINOR.PATCH"
+  const mmpCompared = compareDotSeparated(aDashSplit[0], bDashSplit[0]);
+  if (mmpCompared !== null) return mmpCompared;
+  if (aDashSplit.length === 1 && bDashSplit.length > 1) return false;
+  if (bDashSplit.length === 1 && aDashSplit.length > 1) return true;
+  const aPrerelease = (aDashSplit.length === 1) ? "" : aDashSplit.slice(1).join("-");
+  const bPrerelease = (bDashSplit.length === 1) ? "" : bDashSplit.slice(1).join("-");
+  return compareDotSeparated(aPrerelease, bPrerelease);
+};
+
+// ----- END UPDATER MODULE ------
