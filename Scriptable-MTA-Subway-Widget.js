@@ -14,8 +14,9 @@
  * https://api.wheresthefuckingtrain.com/by-route/
  *
  */
-const API_URL = 'https://api.wheresthefuckingtrain.com';
-const version = 'v1.0.23';	// 1.0. followed by the number of commits (an attempt at semantic versioning)
+const API_URL = "https://api.wheresthefuckingtrain.com";
+const version = "1.0.28";	  // 1.0. followed by the number of commits (an attempt at semantic versioning)
+var isUpdateReady = false;	// will be set true if there is an update available 
 
 // get parameter for route
 // get parameter for station
@@ -114,7 +115,7 @@ minText.textColor = new Color('#00FF66');
 const lastUpdatedStackVersion = lastUpdatedStack.addStack();
 lastUpdatedStackVersion.layoutHorizontally();
 lastUpdatedStackVersion.addSpacer();
-const versionText = lastUpdatedStackVersion.addText(version);
+const versionText = lastUpdatedStackVersion.addText("v"+version);
 versionText.font = new Font("Menlo", 10);
 versionText.textColor = new Color('#222222');
 
@@ -201,12 +202,63 @@ stationStack.addSpacer();	// used to center the text (2 of 2)
 // END DRAW WIDGET
 // ---------------
 
+/* ------------------------------------
+ *  Sharable (beta)
+ *  Remote update for version control
+ *  https://shareable.vercel.app/docs/updater
+ * ------------------------------------
+ */
 
-Script.setWidget(w);
-Script.complete();
+async function getUpdateData() {
+	
+	const id = 60; // Your script's shareable id
+	let updateURL = "https://shareable.vercel.app/api/updater?id=" + id;
+	let updateRequest = new Request(updateURL);
+	let updateJSON = await updateRequest.loadJSON();
+	return updateJSON;
+}
 
-// RUN WIDGET
-w.presentSmall();
+// function to be called when update data is available
+async function checkForUpdatesAndRender(data) {
+	
+	isUpdateReady = await isCurrentVersionDifferentFrom(version, data.version);
+
+	if( isUpdateReady ){
+		console.log("Update Available");
+		versionText.textColor = new Color('#007AFF');
+	}
+
+	Script.setWidget(w);
+	Script.complete();
+
+	// RUN WIDGET
+	w.presentSmall();
+}
+
+// returns true if different
+async function isCurrentVersionDifferentFrom(v1, v2) {
+	const v1DotSplit = v1.split(".");
+  const v2DotSplit = v2.split(".");
+
+  if(v1DotSplit.length != v2DotSplit.length) {
+  	// console.log("version length diff");
+  	return true;
+  }
+
+  for(var i=0; i<v1DotSplit.length; i++) {
+  	if(v1DotSplit[i] != v2DotSplit[i]) {
+  		// console.log("version param " + i + " diff");
+  		return true;
+  	}
+  }
+
+  // console.log("No version diff");
+  return false;
+}
+
+// checking for updates, using promises to await the data
+getUpdateData().then(res => checkForUpdatesAndRender(res)).catch(err => console.log(err)); 
+
 
 
 /*
