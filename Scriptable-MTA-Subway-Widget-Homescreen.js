@@ -1,5 +1,5 @@
 /* 
- * "Now Departing" a scriptable widget
+ * "Now Departing" a scriptable homescreen widget
  * by Jonathan Bobrow
  * December 25, 2022
  *
@@ -51,7 +51,7 @@ const times = getTimesForRouteAndDirection(route, direction, stationJSON);
 // START DRAW WIDGET
 // -----------------
 let w = new ListWidget();
-w.setPadding(0,20,0,20);
+w.setPadding(0,0,0,0);
 w.backgroundColor = new Color('#000000');
 w.refreshAfterDate = new Date(Date.now()+1000*60);	// set this to refresh every minute...
 
