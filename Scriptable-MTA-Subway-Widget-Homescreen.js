@@ -63,72 +63,40 @@ row.layoutHorizontally();
 const routeStack = row.addStack();
 routeStack.centerAlignContent();
 routeStack.setPadding(2,0,0,0);
-routeStack.size = new Size(60,60);
-routeStack.cornerRadius = 30;
-routeStack.backgroundColor = getColorForRoute(route);
+routeStack.size = new Size(40,40);
+routeStack.cornerRadius = 20;
+routeStack.backgroundColor = new Color('#FFFFFF');//getColorForRoute(route);
 const routeText = routeStack.addText(route);
-routeText.font = new Font("Helvetica-Bold", 40);
-routeText.textColor = new Color('#FFFFFF');
+routeText.font = new Font("Helvetica-Bold", 28);
+routeText.textColor = new Color('#000000');
 
 // routeStack.borderWidth = 1;
 // routeStack.borderColor = new Color('#0000FF');
 
 
-// DRAW LAST UPDATED TIME
-let updatedDate = new Date(json.updated);
-let updatedTimeText = formatTime(updatedDate);
-// SHOW MINUTES SINCE LAST UPDATE (if this is static, it's not useful)
-// let timeSinceUpdate = new Date(Date.now() - updatedDate);
-// let minSinceUpdate = timeSinceUpdate.getMinutes();
-// let minSinceUpdateText = minSinceUpdate + " min ago";
+const stationTimeStack = row.addStack();
+stationTimeStack.layoutVertically();
+stationTimeStack.setPadding(0,5,0,0);
 
-
-const lastUpdatedStack = row.addStack();
-lastUpdatedStack.setPadding(0, 0, 0, 0);
-lastUpdatedStack.layoutVertically();
-// lastUpdatedStack.borderWidth = 1;
-// lastUpdatedStack.borderColor = new Color('#0000FF');
-
-
-const lastUpdatedStackTop = lastUpdatedStack.addStack();
-lastUpdatedStackTop.layoutHorizontally();
-lastUpdatedStackTop.addSpacer();
-const lastUpdatedText = lastUpdatedStackTop.addText("Updated");
-lastUpdatedText.font = Font.mediumSystemFont(10);
-lastUpdatedText.textColor = new Color('#FFFFFF');
-lastUpdatedText.lineLimit = 1;
-// lastUpdatedStackTop.borderWidth = 1;
-// lastUpdatedStackTop.borderColor = new Color('#FF00FF');
-
-
-const lastUpdatedStackBottom = lastUpdatedStack.addStack();
-lastUpdatedStackBottom.layoutHorizontally();
-lastUpdatedStackBottom.addSpacer();
-const minText = lastUpdatedStackBottom.addText(updatedTimeText);	// TODO: time or minutes
-minText.font = Font.mediumSystemFont(10);
-minText.textColor = new Color('#00FF66');
-// lastUpdatedStackBottom.borderWidth = 1;
-// lastUpdatedStackBottom.borderColor = new Color('#FF00FF');
-
-// ADD THE SCRIPT VERSION #
-const lastUpdatedStackVersion = lastUpdatedStack.addStack();
-lastUpdatedStackVersion.layoutHorizontally();
-lastUpdatedStackVersion.addSpacer();
-const versionText = lastUpdatedStackVersion.addText("v"+version);
-versionText.font = new Font("Menlo", 10);
-versionText.textColor = new Color('#222222');
+// DRAW STATION
+const stationStack = stationTimeStack.addStack();
+stationStack.setPadding(0, 0, 0, 0);
+// stationStack.borderWidth = 1;
+// stationStack.borderColor = new Color('#FF00FF');
+const stationText = stationStack.addText(station);
+stationText.font = new Font("Helvetica", 14);
+stationText.textColor = new Color('#FFFFFF');
+stationText.lineLimit = 1;
+stationText.minimumScaleFactor = 0.5;
+stationStack.addSpacer();	// used to center the text (2 of 2)
 
 
 // DRAW TIMES
-const timeStack = w.addStack();
+const timeStack = stationTimeStack.addStack();
 timeStack.setPadding(2, 0, 0, 0);
-timeStack.layoutVertically();
 
 const bigTimeStack = timeStack.addStack();
-bigTimeStack.addSpacer();	// used to center the text (1 of 2)
-bigTimeStack.centerAlignContent();
 bigTimeStack.setPadding(0, 0, 0, 0);
-bigTimeStack.layoutHorizontally();
 // timeStack.borderWidth = 1;
 // timeStack.borderColor = new Color('#FF00FF');
 
@@ -142,11 +110,8 @@ if(getMinutesTil(times[timeIndex]) > 55) {
 	// in theory this should be iterative, but in practice, no need
 }
 
-let minutesTilText = times[timeIndex] && times[timeIndex] != "no times" ? getMinutesTilText(times[timeIndex]) : "- min";
-
 const bigTimeText = bigTimeStack.addDate(times[timeIndex]);
 bigTimeText.applyRelativeStyle();
-bigTimeText.centerAlignText();
 
 // --------------------------------------------
 //
@@ -154,56 +119,39 @@ bigTimeText.centerAlignText();
 //
 // --------------------------------------------
 
-bigTimeText.font = new Font("Helvetica-Bold", 28);
+bigTimeText.font = new Font("Helvetica-Bold", 18);
 bigTimeText.textColor = new Color('#FFFFFF');
 bigTimeText.lineLimit = 1;
 bigTimeText.minimumScaleFactor = 0.5;
-bigTimeStack.addSpacer();	// used to center the text (2 of 2)
 
 // DRAW ALT TIMES
-const altTimeStack = timeStack.addStack();
-altTimeStack.addSpacer();	// used to center the text (1 of 2)
-altTimeStack.centerAlignContent();
-altTimeStack.setPadding(0, 0, 0, 0);
-altTimeStack.layoutHorizontally();
+// const altTimeStack = timeStack.addStack();
+// altTimeStack.addSpacer();	// used to center the text (1 of 2)
+// altTimeStack.centerAlignContent();
+// altTimeStack.setPadding(0, 0, 0, 0);
+// altTimeStack.layoutHorizontally();
 // altTimeStack.borderWidth = 1;
 // altTimeStack.borderColor = new Color('#FF00FF');
 
-for(var i = timeIndex+1; i < times.length; i++) {
+// for(var i = timeIndex+1; i < times.length; i++) {
 	
-	var altMinutesTilText;
+// 	var altMinutesTilText;
 	
-	if(i != timeIndex+1 ) {
-		altMinutesTilText = ", " + getMinutesTilText(times[i]);
-	}
-	else {
-		altMinutesTilText = getMinutesTilText(times[i]);
-	}
+// 	if(i != timeIndex+1 ) {
+// 		altMinutesTilText = ", " + getMinutesTilText(times[i]);
+// 	}
+// 	else {
+// 		altMinutesTilText = getMinutesTilText(times[i]);
+// 	}
 	
-	const altTimeText = altTimeStack.addText(altMinutesTilText);
-	altTimeText.font = new Font("Helvetica-Bold", 12);
-	altTimeText.textColor = new Color('#666666');
-	altTimeText.lineLimit = 1;
-	altTimeText.minimumScaleFactor = 0.75;
-}
+// 	const altTimeText = altTimeStack.addText(altMinutesTilText);
+// 	altTimeText.font = new Font("Helvetica-Bold", 12);
+// 	altTimeText.textColor = new Color('#666666');
+// 	altTimeText.lineLimit = 1;
+// 	altTimeText.minimumScaleFactor = 0.75;
+// }
 
-altTimeStack.addSpacer();	// used to center the text (2 of 2)
-
-
-
-// DRAW STATION
-const stationStack = w.addStack();
-stationStack.addSpacer();	// used to center the text (1 of 2)
-stationStack.centerAlignContent();
-stationStack.setPadding(0, 0, 0, 0);
-// stationStack.borderWidth = 1;
-// stationStack.borderColor = new Color('#FF00FF');
-const stationText = stationStack.addText(station);
-stationText.font = new Font("Helvetica", 14);
-stationText.textColor = new Color('#FFFFFF');
-stationText.lineLimit = 1;
-stationText.minimumScaleFactor = 0.5;
-stationStack.addSpacer();	// used to center the text (2 of 2)
+// altTimeStack.addSpacer();	// used to center the text (2 of 2)
 
 
 // ---------------
@@ -236,10 +184,11 @@ function getMinutesTil(date) {
  */
 
 function getMinutesTilText(date) {
-	
-	if( getMinutesTil(date) === 0 ) {
-		return "Departing";
-	}
+
+	// no need to show departing on the home screen...	
+	// if( getMinutesTil(date) === 0 ) {
+	// 	return "Departing";
+	// }
 
 	return getMinutesTil(date) + " min";
 }
