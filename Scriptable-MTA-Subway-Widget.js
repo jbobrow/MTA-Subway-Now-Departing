@@ -15,14 +15,14 @@
  *
  */
 const API_URL = 'https://api.wheresthefuckingtrain.com';
-const version = 'v1.0.23';	// 1.0. followed by the number of commits (an attempt at semantic versioning)
+const version = 'v1.0.26';	// 1.0. followed by the number of commits (an attempt at semantic versioning)
 
 // get parameter for route
 // get parameter for station
 // get parameter for direction (N or S)
 const params = args.widgetParameter ? args.widgetParameter.split(",") : [];
-const route = params[0] ? params[0] : "G";
-const station = params[1] ? params[1] : "Classon Av";
+const route = params[0] ? params[0] : "C";
+const station = params[1] ? params[1] : "Fulton St";
 const direction = params[2] ? params[2] : "N";
 
 let url = API_URL + "/by-route/" + route;
@@ -189,7 +189,14 @@ stationStack.centerAlignContent();
 stationStack.setPadding(0, 0, 0, 0);
 // stationStack.borderWidth = 1;
 // stationStack.borderColor = new Color('#FF00FF');
-const stationText = stationStack.addText(station);
+// Add an ▲ for Northbound or ▼ for Southbound (thanks CW&T)
+var stationText;
+if(direction === "N") {
+stationText = stationStack.addText(station+" ▲");
+}
+else {
+stationText = stationStack.addText(station+" ▼");
+}
 stationText.font = new Font("Helvetica", 14);
 stationText.textColor = new Color('#FFFFFF');
 stationText.lineLimit = 1;
