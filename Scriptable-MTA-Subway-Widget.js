@@ -56,6 +56,18 @@ w.backgroundColor = new Color('#000000');
 w.refreshAfterDate = new Date(Date.now()+1000*60);	// set this to refresh every minute...
 
 
+// DRAW THE DIRECTION TEXTURE
+// Add an ▲ for Northbound or ▼ for Southbound (thanks CW&T)
+const canvSize = 282;
+const canvas = new DrawContext();
+canvas.opaque = false;
+canvas.size = new Size(canvSize, canvSize);
+canvas.respectScreenScale = true;
+makeArrow(direction);
+w.backgroundImage = canvas.getImage();	// add the up/down direction background texture
+
+
+
 // DRAW BIG LETTER (MTA Train logo)
 const row = w.addStack();
 row.layoutHorizontally();
@@ -189,14 +201,7 @@ stationStack.centerAlignContent();
 stationStack.setPadding(0, 0, 0, 0);
 // stationStack.borderWidth = 1;
 // stationStack.borderColor = new Color('#FF00FF');
-// Add an ▲ for Northbound or ▼ for Southbound (thanks CW&T)
-var stationText;
-if(direction === "N") {
-stationText = stationStack.addText(station+" ▲");
-}
-else {
-stationText = stationStack.addText(station+" ▼");
-}
+const stationText = stationStack.addText(station);
 stationText.font = new Font("Helvetica", 14);
 stationText.textColor = new Color('#FFFFFF');
 stationText.lineLimit = 1;
@@ -364,4 +369,33 @@ function getTimesForRouteAndDirection(r, dir, station) {
  */
 function standardizeDate(date) {
 	return new Date(date.slice(0, -6));
+}
+
+/*
+ * Adds an arrow to the canvas based on direction
+ */
+function makeArrow(dir) {//radiusOffset, bgCircleColor, fgCircleColor, degree, txtColor) {
+  let ctr = new Point(canvSize / 2, canvSize / 2)
+
+  var shapePath = new Path();
+  if(dir === "N") {
+	  shapePath.move(new Point(ctr.x, ctr.y));
+	  shapePath.addLine(new Point(canvSize,ctr.y+canvSize/3));
+	  shapePath.addLine(new Point(canvSize,canvSize));
+	  shapePath.addLine(new Point(0,canvSize));
+	  shapePath.addLine(new Point(0, ctr.y+canvSize/3));
+	}
+	else {
+		shapePath.move(new Point(ctr.x, ctr.y));
+	  shapePath.addLine(new Point(canvSize,ctr.y-canvSize/3));
+	  shapePath.addLine(new Point(canvSize,0));
+	  shapePath.addLine(new Point(0,0));
+	  shapePath.addLine(new Point(0, ctr.y-canvSize/3));
+	}
+  shapePath.closeSubpath();
+  canvas.addPath(shapePath);
+  canvas.setFillColor(new Color('#222222'));
+  canvas.setLineWidth(0);
+  canvas.fillPath();
+
 }
