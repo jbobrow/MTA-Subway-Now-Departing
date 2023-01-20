@@ -15,7 +15,7 @@
  *
  */
 const API_URL = 'https://api.wheresthefuckingtrain.com';
-const version = 'v1.0.26';	// 1.0. followed by the number of commits (an attempt at semantic versioning)
+const version = 'v1.0.29';	// 1.0. followed by the number of commits (an attempt at semantic versioning)
 
 // get parameter for route
 // get parameter for station
